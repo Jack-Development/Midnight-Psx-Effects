@@ -46,6 +46,7 @@ float  _RimPower;
 float4 _RimColor;
 
 float _VertexColorsToggle;
+float _VertexColorsSaturation;
 
 float _VertexJitterToggle;
 float _vertexResolution;
@@ -90,6 +91,17 @@ float4 _LOD1, _LOD2, _LOD3, _LOD4, _LOD5, _LOD6, _LOD7;
 
 float _DrawDistanceToggle;
 float _MaxDrawDistance;
+
+float _EnableAnimatedVertexToggle;
+TEXTURE2D(_animVertTex);
+SAMPLER(sampler_animVertTex);
+float4 _animVertTex_ST;
+
+float _Scale;
+float _Amplitude;
+float _Speed;
+
+
 
 // *-----------------------------------------------* 
 // |                   Structs                     |
@@ -307,6 +319,22 @@ float HandleCustomLODCameraDistance(VertexAttributes v)
 
     return CalculateVertexDistanceFromCamera(v.positionOS) > _LOD7.w && _LOD7.w > 0;
 }
+
+
+float4 HandleVertAnimations(VertexAttributes v)
+{
+    float4 posOS = v.positionOS;
+
+    if (_EnableAnimatedVertexToggle == 1)
+    {
+        float2 noiseUV = (v.uv.xy + _TimeParameters.x * _Speed) * _Scale;
+        float noiseValue = SAMPLE_TEXTURE2D_LOD(_animVertTex, sampler_animVertTex, noiseUV, 0).r * _Amplitude;
+
+        posOS.xyz += float3(0.0, 0.0, noiseValue); // displace in Y
+    }
+
+    return posOS;
+}
  
 
 float4 HandleVertexOutput(VertexAttributes v)
@@ -322,6 +350,7 @@ float4 HandleVertexOutput(VertexAttributes v)
 
     return TransformObjectToHClip(v.positionOS.xyz);
 }
+
 
 
 // *-----------------------------------------------* 
@@ -654,6 +683,9 @@ void HandleFinalColor(ToFragmentData input, float2 affineUV, float4 originalColo
 ToFragmentData Vertex(VertexAttributes v, const uint instance_id : SV_InstanceID)
 {
     ToFragmentData outputData;
+    
+    // Apply vertex animations first
+    v.positionOS = HandleVertAnimations(v);
     // Structure that contains multiple vertex position Data CS, WS, VS
     VertexPositionInputs vertexInput = GetVertexPositionInputs(v.positionOS.xyz);
     // Structure that contains multiple vertex normal Data TangentWS, NormalWS, BiTangentWS (Used when a normal map has not been assigned)
