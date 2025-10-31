@@ -45,6 +45,9 @@ public class MidnightPSXCustomGUI : ShaderGUI
     bool _DrawDistanceShowPosition = true;
     string _DrawDistanceStatus     = "Draw Distance Settings";
 
+    bool _AnimatedVertexPosition = true;
+    string _animatedVertexStatus = "Animated Vertices Settings";
+
     public override void OnGUI(MaterialEditor editor, MaterialProperty[] properties)
     {
         this.target     = editor.target as Material;
@@ -56,7 +59,8 @@ public class MidnightPSXCustomGUI : ShaderGUI
         HandleLighting();
         HandleVertex();
         HandleDrawDistance();
-        HandleLOD(); 
+        HandleLOD();
+        HandleVertexAnimation();
         HandleAdvancedOptions();
     }
 
@@ -157,7 +161,19 @@ public class MidnightPSXCustomGUI : ShaderGUI
 
     }
 
- 
+
+    void HandleVertexAnimation()
+    {
+        _AnimatedVertexPosition = EditorGUILayout.BeginFoldoutHeaderGroup(_AnimatedVertexPosition, _animatedVertexStatus);
+
+        if (_AnimatedVertexPosition)
+        {
+            DoAnimatedVertexMovement();
+        }
+
+        EditorGUI.EndFoldoutHeaderGroup();
+    }
+
 
     void DoMainTexture()
     {
@@ -662,7 +678,38 @@ public class MidnightPSXCustomGUI : ShaderGUI
 
     }
 
- 
+
+    void DoAnimatedVertexMovement()
+    {
+        MaterialProperty toggle = FindProperty("_EnableAnimatedVertexToggle");
+        MaterialProperty draw   = FindProperty("_animVertTex");
+                      
+        GUIContent drawLabel    = MakeLabel   ("Enable Animated Vertex", "When you enable animated vertex, It lets you apply a texture to be evaluated at each vertex and modify their position");
+
+        editor.ShaderProperty(toggle, drawLabel);
+
+        if (toggle.floatValue == 1)
+        {
+            MaterialProperty maxDrawDistance = FindProperty("_animVertTex");
+            GUIContent maxDrawDistanceLabel  = MakeLabel("Maximum Draw Distance", "");            
+            editor.ShaderProperty(maxDrawDistance, maxDrawDistanceLabel);
+
+            MaterialProperty speed = FindProperty("_Speed");
+            GUIContent speedLabel = MakeLabel("Displacement Speed", "");
+            editor.ShaderProperty(speed, speedLabel);
+
+            MaterialProperty amplitude = FindProperty("_Amplitude");
+            GUIContent aLabel = MakeLabel("Displacement Amplitude", "");
+            editor.ShaderProperty(amplitude, aLabel);
+
+            MaterialProperty scale = FindProperty("_Scale");
+            GUIContent scaleLabel = MakeLabel("Displacement Scale", "");
+            editor.ShaderProperty(scale, scaleLabel);
+        }
+
+    }
+
+
 
     void DoZWrite()
     {
