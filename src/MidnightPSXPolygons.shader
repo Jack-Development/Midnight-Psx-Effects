@@ -86,6 +86,13 @@ Shader "Custom PSX Shaders/Midnight PSX Polygons"
 		[Toggle]_DrawDistanceToggle("Enable Draw Distance", float) = 0
 		_MaxDrawDistance("Max Draw Distance", float) = 50
 
+
+		
+		[Toggle]_EnableAnimatedVertexToggle("Enable Animated Displacement", float) = 0
+		_animVertTex("Animated Vertex Texture", 2D) = "white" {}			
+		_Scale("Displacement scale", float) = 0
+		_Amplitude("Displacement Amplitude", float) = 0
+		_Speed("Displacement Speed", float) = 0
     }
 
     SubShader
