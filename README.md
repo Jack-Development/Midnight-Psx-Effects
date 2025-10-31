@@ -1,3 +1,6 @@
+# IMPORTANT
+To enable multiple additional lights to affect the mesh, you need to go to your "Render Pipeline Asset" and set "Aditional Lights" to "Per Vertex". The shader will take care of how the lights affect the mesh (Per vertex / Pixel).
+
 # MIDNIGHT PSX SHADER
 
 **Midnight PSX Shader** is a fully functional shader made using HLSL that **brings** the original limitations of the PS1 era within the reach of a click. It allows you to create the very look you want for your game/project without needing to touch any code. It is the most flexible shader out there, and the best part is, it's **FREE!**
