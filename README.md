@@ -1,5 +1,6 @@
 # IMPORTANT
 To enable multiple additional lights to affect the mesh, you need to go to your "Render Pipeline Asset" and set "Aditional Lights" to "Per Vertex". The shader will take care of how the lights affect the mesh (Per vertex / Pixel).
+Then go to your "Universal Renderer Data" and change Rendering Path from "Forward+" to just "Forward"
 
 # MIDNIGHT PSX SHADER
 
