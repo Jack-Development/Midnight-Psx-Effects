@@ -52,6 +52,7 @@ Shader "Custom PSX Shaders/Midnight PSX Polygons"
 
 		[Space(5)]
 		[Toggle]_VertexColorsToggle("Enable Vertex Color", float) = 0
+		_VertexColorsSaturation("Vertex Color Saturation", float) = 1
 
 		[Toggle] _VertexJitterToggle("Disable Vertex Precision", float) = 0
 		_vertexResolution("Vertex Precision", float) = 256
